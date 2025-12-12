@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Tools | E.H Mahesh Bhagat</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h2>E.H Mahesh Bhagat</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="linux-tools.html" class="active">Linux Tools</a>
+                <a href="cyber-laws.html">Cyber Laws</a>
+                <a href="login.html">Login</a>
+            </div>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <h1>Linux Cyber Security Tools</h1>
+            <p>Essential tools for every cyber security professional</p>
+        </section>
+
+        <section class="tools-container">
+            <div class="tool-card">
+                <h3><i class="fas fa-network-wired"></i> Nmap</h3>
+                <p><strong>What it is:</strong> Network Mapper (Nmap) is a free and open-source network scanner created by Gordon Lyon.</p>
+                <p><strong>Function:</strong> Nmap is used to discover hosts and services on a computer network by sending packets and analyzing the responses. It provides a number of features for probing computer networks, including host discovery, service detection, and operating system detection.</p>
+            </div>
+
+            <div class="tool-card">
+                <h3><i class="fas fa-key"></i> Hydra</h3>
+                <p><strong>What it is:</strong> THC Hydra is a parallelized login cracker which supports numerous protocols to attack.</p>
+                <p><strong>Function:</strong> It is used to perform brute-force attacks against various services, including remote login protocols like SSH, FTP, and RDP. Security professionals use it to test the strength of passwords and authentication systems.</p>
+            </div>
+
+            <div class="tool-card">
+                <h3><i class="fas fa-wifi"></i> Wireshark</h3>
+                <p><strong>What it is:</strong> Wireshark is a free and open-source packet analyzer used for network troubleshooting, analysis, software and communications protocol development.</p>
+                <p><strong>Function:</strong> It allows users to capture and interactively browse the traffic running on a computer network. It's essential for network security analysis as it can capture packets and display their values in a human-readable format.</p>
+            </div>
+
+            <div class="tool-card">
+                <h3><i class="fas fa-bug"></i> Burp Suite</h3>
+                <p><strong>What it is:</strong> Burp Suite is an integrated platform for performing security testing of web applications.</p>
+                <p><strong>Function:</strong> Its tools work together to support the entire testing process, from initial mapping and analysis of an application's attack surface, through to finding and exploiting security vulnerabilities.</p>
+            </div>
+
+            <div class="tool-card">
+                <h3><i class="fas fa-search"></i> Nikto</h3>
+                <p><strong>What it is:</strong> Nikto is an Open Source web server scanner which performs comprehensive tests against web servers.</p>
+                <p><strong>Function:</strong> It scans for multiple types of potentially dangerous files/CGIs, outdated server software, and other server configuration issues. Nikto also checks for server configuration items such as the presence of multiple index files and HTTP server options.</p>
+            </div>
+
+            <div class="tool-card">
+                <h3><i class="fas fa-terminal"></i> Metasploit Framework</h3>
+                <p><strong>What it is:</strong> The Metasploit Framework is an open-source penetration testing framework used for developing and executing exploit code against a remote target machine.</p>
+                <p><strong>Function:</strong> It provides information about security vulnerabilities and aids in penetration testing and IDS signature development. Professionals use it to test the resilience of networks against attacks.</p>
+            </div>
+        </section>
+
+        <section class="linux-commands">
+            <h2>Basic Linux Commands for Cyber Security</h2>
+            <div class="commands-grid">
+                <div class="command-item">
+                    <code>ls -la</code>
+                    <p>List all files and directories with detailed information, including hidden files</p>
+                </div>
+                <div class="command-item">
+                    <code>cd [directory]</code>
+                    <p>Change the current directory to the specified directory</p>
+                </div>
+                <div class="command-item">
+                    <code>pwd</code>
+                    <p>Print the current working directory</p>
+                </div>
+                <div class="command-item">
+                    <code>cat [file]</code>
+                    <p>Display the contents of a file</p>
+                </div>
+                <div class="command-item">
+                    <code>grep [pattern] [file]</code>
+                    <p>Search for a specific pattern in a file</p>
+                </div>
+                <div class="command-item">
+                    <code>chmod [permissions] [file]</code>
+                    <p>Change the permissions of a file or directory</p>
+                </div>
+                <div class="command-item">
+                    <code>netstat -tuln</code>
+                    <p>Show all listening TCP and UDP ports with numeric addresses</p>
+                </div>
+                <div class="command-item">
+                    <code>ps aux</code>
+                    <p>Display all running processes with detailed information</p>
+                </div>
+                <div class="command-item">
+                    <code>ssh [user]@[host]</code>
+                    <p>Connect to a remote host using SSH</p>
+                </div>
+                <div class="command-item">
+                    <code>scp [file] [user]@[host]:[path]</code>
+                    <p>Securely copy files to a remote host</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="back-home">
+            <a href="index.html" class="btn primary-btn">Back to Home</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2023 E.H Mahesh Bhagat | Ethical Hacker & Cyber Security Learner</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
