@@ -1,38 +1,30 @@
-# PDF Suite - Neural Edition (Android)
+# MB AI PDF READER AND GENERATOR (Android)
 
-Now updated with a cleaner red "PDF tools" style UI and smoother multi-screen flow.
+Updated with cleaner UI and stronger multi-page generation support.
 
-## Modules
+## New/Improved Features
 
-1. **Neural Scanner (Image -> Multi-page PDF)**
-   - Select multiple images from gallery.
-   - Capture image from camera.
-   - Optical modes: B&W / Enhance / Scan.
-   - Simulated AI auto-crop.
-   - Reorder nodes before compile.
-   - Custom watermark signature across pages.
+1. **High-capacity multi-page PDF generation**
+   - Add as many pages as needed from gallery/camera.
+   - Memory-safe sampled decoding to handle larger source images.
+   - Quality control slider (60% to 100%).
+   - A4 / Letter page size selector.
 
-2. **Neural Reader**
-   - Open and render local PDFs.
-   - Zoom control from 50% to 200%.
-   - Prev/Next page controls with page indicator.
+2. **Scanner tools**
+   - Camera capture + gallery import.
+   - Optical modes (B&W / Enhance / Scan).
+   - AI auto-crop simulation.
+   - Watermark signature.
+   - Reorder pages before compile.
+   - Open last generated PDF instantly.
 
-3. **Gemini-3 Brain-Link (Simulated)**
-   - Attach PDF and run summary action.
-   - Ask follow-up questions in persistent session chat.
-
-4. **Cyber-Vault**
-   - PIN lock simulation.
-   - AES/GCM encrypted file storage.
-   - Decrypt-to-cache preview workflow.
+3. **Reader / Brain-Link / Vault**
+   - Reader with zoom and pagination.
+   - Brain-Link session chat (simulated AI flow).
+   - Vault with AES/GCM encrypted local storage.
 
 ## Build & Run
 
 1. Open `android-pdf-app` in Android Studio.
 2. Sync Gradle.
 3. Build APK from **Build > Build APK(s)**.
-
-## Notes
-
-- Brain-Link is currently a local simulated assistant (no live cloud API wired yet).
-- Vault encryption is local and stored in app-private directories.

@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Images to PDF"
+            android:text="Images to PDF (Multi-Page)"
             android:textColor="#D50000"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -49,6 +49,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerPageSize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvQuality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Quality: 85%"
+            android:textStyle="bold" />
+
+        <SeekBar
+            android:id="@+id/seekQuality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <CheckBox
             android:id="@+id/cbAutoCrop"
@@ -87,6 +106,15 @@
             android:layout_marginTop="10dp"
             android:backgroundTint="#E50914"
             android:text="Create PDF"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnOpenLastPdf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#B00020"
+            android:text="Open Last PDF"
             android:textColor="#FFFFFF" />
 
         <TextView
