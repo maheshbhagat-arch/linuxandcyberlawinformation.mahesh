@@ -1,29 +1,30 @@
 # PDF Suite - Neural Edition (Android)
 
-This app is now multi-screen and includes the requested feature families:
+Now updated with a cleaner red "PDF tools" style UI and smoother multi-screen flow.
+
+## Modules
 
 1. **Neural Scanner (Image -> Multi-page PDF)**
-   - Multi-image pick and compile.
+   - Select multiple images from gallery.
+   - Capture image from camera.
    - Optical modes: B&W / Enhance / Scan.
    - Simulated AI auto-crop.
-   - Reorder sequence (reverse action as demo).
-   - Custom "Neural Signature" watermark drawn on pages.
+   - Reorder nodes before compile.
+   - Custom watermark signature across pages.
 
 2. **Neural Reader**
-   - Open local PDF and render pages.
-   - Zoom controls from 50% to 200%.
-   - Prev/Next page navigation with indicator.
-   - Home indexes local PDFs via MediaStore query.
+   - Open and render local PDFs.
+   - Zoom control from 50% to 200%.
+   - Prev/Next page controls with page indicator.
 
-3. **Gemini-3 Brain-Link (Simulated AI)**
-   - Attach PDF and run a summary protocol.
-   - Ask contextual questions with persistent chat thread (session).
+3. **Gemini-3 Brain-Link (Simulated)**
+   - Attach PDF and run summary action.
+   - Ask follow-up questions in persistent session chat.
 
 4. **Cyber-Vault**
    - PIN lock simulation.
-   - AES-256 (SHA-256 key derivation + AES/GCM encryption).
-   - Encrypted vault files in app-private storage.
-   - Decrypt to cache for transient use.
+   - AES/GCM encrypted file storage.
+   - Decrypt-to-cache preview workflow.
 
 ## Build & Run
 
@@ -33,5 +34,5 @@ This app is now multi-screen and includes the requested feature families:
 
 ## Notes
 
-- Brain-Link is a simulated local assistant; no remote AI API key needed.
-- Vault uses local encryption and app storage directories.
+- Brain-Link is currently a local simulated assistant (no live cloud API wired yet).
+- Vault encryption is local and stored in app-private directories.

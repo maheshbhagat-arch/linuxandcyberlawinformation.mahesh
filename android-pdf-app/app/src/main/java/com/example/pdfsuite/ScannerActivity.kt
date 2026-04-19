@@ -23,13 +23,21 @@ import androidx.appcompat.app.AppCompatActivity
 
 class ScannerActivity : AppCompatActivity() {
 
-    private val imageUris = mutableListOf<Uri>()
+    private data class ScanNode(val name: String, val uri: Uri? = null, val bitmap: Bitmap? = null)
+
+    private val nodes = mutableListOf<ScanNode>()
     private lateinit var listAdapter: ArrayAdapter<String>
 
     private val pickImages = registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
-        imageUris.clear()
-        imageUris.addAll(uris)
+        uris.forEachIndexed { i, uri -> nodes += ScanNode(name = "Gallery ${nodes.size + i + 1}", uri = uri) }
         refreshList()
+    }
+
+    private val capturePreview = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bmp ->
+        if (bmp != null) {
+            nodes += ScanNode(name = "Camera ${nodes.size + 1}", bitmap = bmp)
+            refreshList()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,20 +60,24 @@ class ScannerActivity : AppCompatActivity() {
             pickImages.launch(arrayOf("image/*"))
         }
 
+        findViewById<Button>(R.id.btnCapture).setOnClickListener {
+            capturePreview.launch(null)
+        }
+
         findViewById<Button>(R.id.btnReorder).setOnClickListener {
-            imageUris.reverse()
+            nodes.reverse()
             refreshList()
-            status.text = "Sequential compiling order reversed (simulated reorder)."
+            status.text = "Sequential compiling order changed."
         }
 
         findViewById<Button>(R.id.btnGenerateFromImages).setOnClickListener {
-            if (imageUris.isEmpty()) {
-                Toast.makeText(this, "Pick images first", Toast.LENGTH_SHORT).show()
+            if (nodes.isEmpty()) {
+                Toast.makeText(this, "Pick or capture images first", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val result = createPdfFromImages(
-                imageUris,
+                nodes,
                 modeSpinner.selectedItem.toString(),
                 autoCrop.isChecked,
                 watermark.text.toString().trim()
@@ -76,12 +88,12 @@ class ScannerActivity : AppCompatActivity() {
 
     private fun refreshList() {
         listAdapter.clear()
-        listAdapter.addAll(imageUris.mapIndexed { index, uri -> "Node ${index + 1}: $uri" })
+        listAdapter.addAll(nodes.mapIndexed { index, node -> "Node ${index + 1}: ${node.name}" })
         listAdapter.notifyDataSetChanged()
     }
 
     private fun createPdfFromImages(
-        uris: List<Uri>,
+        scanNodes: List<ScanNode>,
         mode: String,
         autoCrop: Boolean,
         watermark: String
@@ -89,8 +101,13 @@ class ScannerActivity : AppCompatActivity() {
         val document = PdfDocument()
 
         try {
-            uris.forEachIndexed { index, uri ->
-                val bitmap = decodeBitmap(uri) ?: return@forEachIndexed
+            scanNodes.forEachIndexed { index, node ->
+                val bitmap = when {
+                    node.bitmap != null -> node.bitmap
+                    node.uri != null -> decodeBitmap(node.uri)
+                    else -> null
+                } ?: return@forEachIndexed
+
                 val processed = processBitmap(bitmap, mode, autoCrop)
 
                 val pageInfo = PdfDocument.PageInfo.Builder(595, 842, index + 1).create()
@@ -129,7 +146,7 @@ class ScannerActivity : AppCompatActivity() {
             values.put(MediaStore.Downloads.IS_PENDING, 0)
             contentResolver.update(uri, values, null, null)
 
-            return "Neural Scanner compiled ${uris.size} nodes to $fileName"
+            return "Done: ${scanNodes.size} pages saved as $fileName"
         } catch (e: Exception) {
             return "Error: ${e.message}"
         } finally {
@@ -151,12 +168,13 @@ class ScannerActivity : AppCompatActivity() {
         if (autoCrop) {
             val left = (output.width * 0.03).toInt()
             val top = (output.height * 0.03).toInt()
-            val width = (output.width * 0.94).toInt()
-            val height = (output.height * 0.94).toInt()
+            val width = (output.width * 0.94).toInt().coerceAtLeast(1)
+            val height = (output.height * 0.94).toInt().coerceAtLeast(1)
             output = Bitmap.createBitmap(output, left, top, width, height)
         }
 
-        val canvas = Canvas(output)
+        val filtered = Bitmap.createBitmap(output.width, output.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(filtered)
         val paint = Paint()
         val matrix = ColorMatrix()
 
@@ -165,9 +183,9 @@ class ScannerActivity : AppCompatActivity() {
             "Enhance (AI Clarity)" -> {
                 matrix.set(
                     floatArrayOf(
-                        1.2f, 0f, 0f, 0f, 10f,
-                        0f, 1.2f, 0f, 0f, 10f,
-                        0f, 0f, 1.2f, 0f, 10f,
+                        1.2f, 0f, 0f, 0f, 12f,
+                        0f, 1.2f, 0f, 0f, 12f,
+                        0f, 0f, 1.2f, 0f, 12f,
                         0f, 0f, 0f, 1f, 0f
                     )
                 )
@@ -175,9 +193,9 @@ class ScannerActivity : AppCompatActivity() {
             else -> {
                 matrix.set(
                     floatArrayOf(
-                        1.1f, 0f, 0f, 0f, 0f,
-                        0f, 1.1f, 0f, 0f, 0f,
-                        0f, 0f, 1.1f, 0f, 0f,
+                        1.1f, 0f, 0f, 0f, 6f,
+                        0f, 1.1f, 0f, 0f, 6f,
+                        0f, 0f, 1.1f, 0f, 6f,
                         0f, 0f, 0f, 1f, 0f
                     )
                 )
@@ -186,6 +204,6 @@ class ScannerActivity : AppCompatActivity() {
 
         paint.colorFilter = ColorMatrixColorFilter(matrix)
         canvas.drawBitmap(output, 0f, 0f, paint)
-        return output
+        return filtered
     }
 }

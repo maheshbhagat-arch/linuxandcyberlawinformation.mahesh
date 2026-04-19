@@ -3,20 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="12dp"
+    android:background="#F7F7F7">
 
     <Button
         android:id="@+id/btnPickPdfReader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Open PDF" />
+        android:backgroundTint="#E50914"
+        android:text="Open PDF"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/tvPageIndicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:text="Neural View 0/0"
-        android:layout_marginTop="6dp" />
+        android:textStyle="bold" />
 
     <ProgressBar
         android:id="@+id/loadingBar"
@@ -30,16 +34,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#EAEAEA"
         android:adjustViewBounds="true"
+        android:background="#EEEEEE"
         android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/tvZoom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Zoom: 100%"
-        android:layout_marginTop="6dp" />
+        android:layout_marginTop="6dp"
+        android:text="Zoom: 100%" />
 
     <SeekBar
         android:id="@+id/seekZoom"
@@ -56,13 +60,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Prev" />
+            android:backgroundTint="#B00020"
+            android:text="Prev"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/btnNext"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Next" />
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#B00020"
+            android:text="Next"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </LinearLayout>

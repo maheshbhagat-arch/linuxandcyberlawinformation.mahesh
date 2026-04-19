@@ -3,12 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="12dp"
+    android:background="#F7F7F7">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cyber-Vault"
+        android:textColor="#D50000"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etVaultPin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:hint="Enter PIN"
         android:inputType="numberPassword" />
 
@@ -23,14 +33,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Set PIN" />
+            android:backgroundTint="#B00020"
+            android:text="Set PIN"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/btnUnlock"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Unlock" />
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#E50914"
+            android:text="Unlock"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 
     <Button
@@ -38,6 +53,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Import PDF to Vault"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#E50914"
         android:layout_marginTop="6dp" />
 
     <TextView
@@ -45,7 +62,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Vault locked"
-        android:layout_marginTop="6dp" />
+        android:layout_marginTop="6dp"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/vaultList"
