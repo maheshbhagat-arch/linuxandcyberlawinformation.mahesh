@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Neural Scanner"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btnPickImages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick Lens Captures"
+            android:layout_marginTop="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <CheckBox
+            android:id="@+id/cbAutoCrop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AI Auto-Crop (simulated)"
+            android:checked="true" />
+
+        <EditText
+            android:id="@+id/etWatermark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Custom Neural Signature" />
+
+        <Button
+            android:id="@+id/btnReorder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reorder Nodes"
+            android:layout_marginTop="8dp" />
+
+        <ListView
+            android:id="@+id/imageList"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnGenerateFromImages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Compile Multi-Page PDF"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvScanStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ready"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+</ScrollView>

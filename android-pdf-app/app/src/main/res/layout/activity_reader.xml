@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <Button
+        android:id="@+id/btnPickPdfReader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open PDF" />
+
+    <TextView
+        android:id="@+id/tvPageIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Neural View 0/0"
+        android:layout_marginTop="6dp" />
+
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp" />
+
+    <ImageView
+        android:id="@+id/ivReader"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#EAEAEA"
+        android:adjustViewBounds="true"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/tvZoom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Zoom: 100%"
+        android:layout_marginTop="6dp" />
+
+    <SeekBar
+        android:id="@+id/seekZoom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPrev"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Prev" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Next" />
+    </LinearLayout>
+</LinearLayout>

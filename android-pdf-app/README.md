@@ -1,23 +1,37 @@
-# PDF Suite (Android)
+# PDF Suite - Neural Edition (Android)
 
-A simple Android app that demonstrates:
+This app is now multi-screen and includes the requested feature families:
 
-1. **PDF Reader**: opens a PDF from device storage and renders page 1.
-2. **PDF Generator**: creates a one-page PDF from typed title/body content.
+1. **Neural Scanner (Image -> Multi-page PDF)**
+   - Multi-image pick and compile.
+   - Optical modes: B&W / Enhance / Scan.
+   - Simulated AI auto-crop.
+   - Reorder sequence (reverse action as demo).
+   - Custom "Neural Signature" watermark drawn on pages.
 
-## Requirements
+2. **Neural Reader**
+   - Open local PDF and render pages.
+   - Zoom controls from 50% to 200%.
+   - Prev/Next page navigation with indicator.
+   - Home indexes local PDFs via MediaStore query.
 
-- Android Studio Iguana+ (or newer)
-- Android SDK 34
-- Min SDK 24
+3. **Gemini-3 Brain-Link (Simulated AI)**
+   - Attach PDF and run a summary protocol.
+   - Ask contextual questions with persistent chat thread (session).
 
-## How to run
+4. **Cyber-Vault**
+   - PIN lock simulation.
+   - AES-256 (SHA-256 key derivation + AES/GCM encryption).
+   - Encrypted vault files in app-private storage.
+   - Decrypt to cache for transient use.
+
+## Build & Run
 
 1. Open `android-pdf-app` in Android Studio.
-2. Let Gradle sync complete.
-3. Run on emulator/device.
+2. Sync Gradle.
+3. Build APK from **Build > Build APK(s)**.
 
 ## Notes
 
-- Generated files are saved in app-internal storage (`filesDir`).
-- Reader currently previews only the first page for simplicity.
+- Brain-Link is a simulated local assistant; no remote AI API key needed.
+- Vault uses local encryption and app storage directories.

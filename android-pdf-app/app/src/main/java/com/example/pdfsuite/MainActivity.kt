@@ -1,179 +1,133 @@
 package com.example.pdfsuite
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.pdf.PdfDocument
-import android.graphics.pdf.PdfRenderer
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import java.io.File
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var btnPickPdf: Button
-    private lateinit var btnGeneratePdf: Button
-    private lateinit var pdfPreview: ImageView
-    private lateinit var etTitle: EditText
-    private lateinit var etBody: EditText
-    private lateinit var tvStatus: TextView
+    private lateinit var pdfList: ListView
+    private lateinit var status: TextView
+    private val pdfUris = mutableListOf<Uri>()
+    private lateinit var adapter: ArrayAdapter<String>
 
-    private val openPdfLauncher = registerForActivityResult(
-        ActivityResultContracts.OpenDocument()
-    ) { uri: Uri? ->
-        if (uri == null) {
-            setStatus("No file selected.")
-            return@registerForActivityResult
-        }
-        renderFirstPage(uri)
+    private val openSinglePdf = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        uri?.let { openReader(it) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        bindViews()
-        setListeners()
-    }
+        pdfList = findViewById(R.id.pdfList)
+        status = findViewById(R.id.tvStatus)
 
-    private fun bindViews() {
-        btnPickPdf = findViewById(R.id.btnPickPdf)
-        btnGeneratePdf = findViewById(R.id.btnGeneratePdf)
-        pdfPreview = findViewById(R.id.pdfPreview)
-        etTitle = findViewById(R.id.etTitle)
-        etBody = findViewById(R.id.etBody)
-        tvStatus = findViewById(R.id.tvStatus)
-    }
-
-    private fun setListeners() {
-        btnPickPdf.setOnClickListener {
-            openPdfLauncher.launch(arrayOf("application/pdf"))
+        findViewById<Button>(R.id.btnScanner).setOnClickListener {
+            startActivity(Intent(this, ScannerActivity::class.java))
+        }
+        findViewById<Button>(R.id.btnReader).setOnClickListener {
+            openSinglePdf.launch(arrayOf("application/pdf"))
+        }
+        findViewById<Button>(R.id.btnBrain).setOnClickListener {
+            startActivity(Intent(this, BrainLinkActivity::class.java))
+        }
+        findViewById<Button>(R.id.btnVault).setOnClickListener {
+            startActivity(Intent(this, VaultActivity::class.java))
         }
 
-        btnGeneratePdf.setOnClickListener {
-            val title = etTitle.text.toString().trim().ifBlank { "Untitled Document" }
-            val body = etBody.text.toString().trim().ifBlank {
-                "No content provided."
-            }
-            createPdf(title, body)
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf())
+        pdfList.adapter = adapter
+        pdfList.setOnItemClickListener { _, _, position, _ ->
+            openReader(pdfUris[position])
         }
+
+        ensurePermissionsAndLoad()
     }
 
-    private fun renderFirstPage(uri: Uri) {
-        try {
-            contentResolver.openFileDescriptor(uri, "r")?.use { pfd ->
-                PdfRenderer(pfd).use { renderer ->
-                    if (renderer.pageCount == 0) {
-                        setStatus("Selected PDF has no pages.")
-                        return
-                    }
+    override fun onResume() {
+        super.onResume()
+        loadPdfIndex()
+    }
 
-                    renderer.openPage(0).use { page ->
-                        val bitmap = Bitmap.createBitmap(
-                            page.width,
-                            page.height,
-                            Bitmap.Config.ARGB_8888
-                        )
-                        page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                        pdfPreview.setImageBitmap(bitmap)
-                        setStatus("Opened PDF. Showing page 1 of ${renderer.pageCount}.")
-                    }
-                }
-            } ?: run {
-                setStatus("Unable to read the selected file.")
-            }
-        } catch (e: Exception) {
-            setStatus("Error opening PDF: ${e.message}")
+    private fun ensurePermissionsAndLoad() {
+        val permissions = mutableListOf(Manifest.permission.CAMERA)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+            permissions += Manifest.permission.READ_EXTERNAL_STORAGE
+        } else {
+            permissions += Manifest.permission.READ_MEDIA_IMAGES
+            permissions += Manifest.permission.READ_MEDIA_VIDEO
+        }
+
+        val missing = permissions.filter {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (missing.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, missing.toTypedArray(), 77)
+        } else {
+            loadPdfIndex()
         }
     }
 
-    private fun createPdf(title: String, body: String) {
-        val document = PdfDocument()
-
-        try {
-            val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create()
-            val page = document.startPage(pageInfo)
-            val canvas: Canvas = page.canvas
-
-            drawPdfContent(canvas, title, body)
-            document.finishPage(page)
-
-            val outputFile = File(filesDir, "generated_${System.currentTimeMillis()}.pdf")
-            outputFile.outputStream().use { out ->
-                document.writeTo(out)
-            }
-
-            setStatus("PDF saved in app storage: ${outputFile.name}")
-            Toast.makeText(this, "PDF generated successfully", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            setStatus("Error generating PDF: ${e.message}")
-        } finally {
-            document.close()
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 77) {
+            loadPdfIndex()
         }
     }
 
-    private fun drawPdfContent(canvas: Canvas, title: String, body: String) {
-        canvas.drawColor(Color.WHITE)
+    private fun loadPdfIndex() {
+        val projection = arrayOf(MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.TITLE)
+        val selection = "${MediaStore.Files.FileColumns.MIME_TYPE}=?"
+        val args = arrayOf("application/pdf")
+        val sort = "${MediaStore.Files.FileColumns.DATE_MODIFIED} DESC"
 
-        val titlePaint = Paint().apply {
-            color = Color.BLACK
-            textSize = 28f
-            isFakeBoldText = true
-        }
+        val names = mutableListOf<String>()
+        pdfUris.clear()
 
-        val bodyPaint = Paint().apply {
-            color = Color.DKGRAY
-            textSize = 16f
-        }
-
-        canvas.drawText(title, 40f, 80f, titlePaint)
-
-        val maxWidth = 510f
-        var y = 130f
-        body.split("\n").forEach { paragraph ->
-            wrapText(paragraph, bodyPaint, maxWidth).forEach { line ->
-                canvas.drawText(line, 40f, y, bodyPaint)
-                y += 24f
-            }
-            y += 12f
-        }
-    }
-
-    private fun wrapText(text: String, paint: Paint, maxWidth: Float): List<String> {
-        if (text.isBlank()) return listOf("")
-
-        val words = text.split(" ")
-        val lines = mutableListOf<String>()
-        val current = StringBuilder()
-
-        for (word in words) {
-            val candidate = if (current.isEmpty()) word else "${current} $word"
-            if (paint.measureText(candidate) <= maxWidth) {
-                current.clear()
-                current.append(candidate)
-            } else {
-                lines.add(current.toString())
-                current.clear()
-                current.append(word)
+        val collection = MediaStore.Files.getContentUri("external")
+        contentResolver.query(collection, projection, selection, args, sort)?.use { cursor ->
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
+            val titleCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE)
+            while (cursor.moveToNext()) {
+                val id = cursor.getLong(idColumn)
+                val title = cursor.getString(titleCol) ?: "Untitled.pdf"
+                val uri = Uri.withAppendedPath(collection, id.toString())
+                pdfUris += uri
+                names += title
             }
         }
 
-        if (current.isNotEmpty()) {
-            lines.add(current.toString())
-        }
+        adapter.clear()
+        adapter.addAll(names)
+        adapter.notifyDataSetChanged()
 
-        return lines
+        status.text = "Indexed PDFs: ${names.size}"
+        if (names.isEmpty()) {
+            Toast.makeText(this, "No PDFs indexed. Use Reader button to pick manually.", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
-    private fun setStatus(message: String) {
-        tvStatus.text = "Status: $message"
+    private fun openReader(uri: Uri) {
+        val intent = Intent(this, ReaderActivity::class.java).putExtra("pdf_uri", uri.toString())
+        startActivity(intent)
     }
 }
